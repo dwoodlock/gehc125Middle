@@ -5,16 +5,35 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node build/js/app.js",
+    "dev": "npm run cleanbuild && npm run babel",
+    "babel": "babel *.js --out-dir=build/js -w",
+    "cleanbuild": "del build\\js /q/s"
   },
   "author": "Don Woodlock",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.16.1",
+    "btoa": "^1.1.2",
     "cors": "^2.8.1",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.14.1",
     "firebase-admin": "^4.1.3",
     "immutable": "^3.8.1",
+    "multer": "^1.3.0",
     "pouchdb": "^6.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0"
+  },
+  "babel": {
+    "presets": [
+      ["env", {
+        "targets": {
+          "node": "current"
+        }
+      }]
+    ]
   }
 }

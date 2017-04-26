@@ -10,8 +10,12 @@ var PouchDB = require('pouchdb');
 var immutable = require('immutable');
 var admin = require("firebase-admin");
 var cloudantCredentials = require('./cloudantCredentials');
+var multer = require('multer');
+var handleS3Credentials = require('./s3Credentials');
 
-var serviceAccount = require("./gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
+var upload=multer({dest: 'uploads/'});
+
+var serviceAccount = require("../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -144,11 +148,15 @@ app.post('/gameresults', function (req, res) {
   res.send("hey");
 })
 
-app.post('/post', function (req, res) {
+app.post('/post', upload.any(), function (req, res, next) {
   console.log("got a post at /post");
   console.log("here's the body: ", req.body);
+  console.log("here's the file info ", req.files[0]);
+
   res.send("{}");
 })
+
+app.get("/s3Credentials", handleS3Credentials);
 
 function sortByDate(a, b) {
   return (a.timestamp - b.timestamp);
