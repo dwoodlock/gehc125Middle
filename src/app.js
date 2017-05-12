@@ -1,5 +1,6 @@
 //app.js
 
+
 var port = process.env.PORT || 5000;
 var express = require('express')
 var cors = require('cors')
@@ -12,10 +13,15 @@ var admin = require("firebase-admin");
 var cloudantCredentials = require('./cloudantCredentials');
 var multer = require('multer');
 var handleS3Credentials = require('./s3Credentials');
+import handlePostMoment from './postMoment';
+import getMoments from './getMoments';
 
-var upload=multer({dest: 'uploads/'});
+const callMe = async (x) => {
+  await Promise.resolve("hi");
+}
 
-var serviceAccount = require("../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
+
+var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -24,7 +30,8 @@ admin.initializeApp({
 
 
 var counter = 0;
-const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is my web page at %TIME%</p> </body> </html>`
+const version = __VERSION__;
+const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is version ${(new Date(version)).toLocaleString()} at %TIME%</p> </body> </html>`
 const usersDb = new PouchDB(
   "https://dwoodlock.cloudant.com/gehc125users", 
   {auth: cloudantCredentials.userDbAuth});
@@ -148,13 +155,8 @@ app.post('/gameresults', function (req, res) {
   res.send("hey");
 })
 
-app.post('/post', upload.any(), function (req, res, next) {
-  console.log("got a post at /post");
-  console.log("here's the body: ", req.body);
-  console.log("here's the file info ", req.files[0]);
-
-  res.send("{}");
-})
+app.post('/post', handlePostMoment);
+app.get('/moments', getMoments);
 
 app.get("/s3Credentials", handleS3Credentials);
 

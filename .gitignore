@@ -1,8 +1,10 @@
-# credentials
+# don stuff
 cloudantCredentials.js
 gehc125-firebase-adminsdk-wnyyt-187283aae4.json
 build
 amazonCredentials.js
+s3Credentials.js
+*.zip
 
 
 
