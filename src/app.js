@@ -20,7 +20,6 @@ const callMe = async (x) => {
   await Promise.resolve("hi");
 }
 
-
 var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
 admin.initializeApp({
@@ -32,9 +31,6 @@ admin.initializeApp({
 var counter = 0;
 const version = __VERSION__;
 const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is version ${(new Date(version)).toLocaleString()} at %TIME%</p> </body> </html>`
-const usersDb = new PouchDB(
-  "https://dwoodlock.cloudant.com/gehc125users", 
-  {auth: cloudantCredentials.userDbAuth});
 
 const gameDB = new PouchDB("https://dwoodlock.cloudant.com/gehc125games", {
   auth: cloudantCredentials.gamesDbAuth

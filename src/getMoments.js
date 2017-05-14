@@ -18,7 +18,10 @@ const usersDb = new PouchDB(
 const getMoments = async (req, res) => {
   console.log("got a get at /moments");
   try {
-    const allDocs = await momentsDb.allDocs({include_docs: true})
+    const allDocs = await momentsDb.allDocs({
+      include_docs: true,
+      descending: true
+    });
     const rows = allDocs.rows;
     const actualDocs = rows.map((r) => r.doc);
     const docsWithoutExtras = actualDocs.map((d) => omit(d, ["_id", "_rev"]));
