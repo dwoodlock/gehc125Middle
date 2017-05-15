@@ -1,7 +1,5 @@
 //getMomentsLambda.js
 
-'use strict';
-
 console.log('Loading function');
 
 // const doc = require('dynamodb-doc');
@@ -15,7 +13,6 @@ exports.handler = (event, context, callback) => {
     result: "Hi Don",
     calculation: 5
   }
-  const err = null;
   
   callback(null, res);
   // {

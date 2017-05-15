@@ -11,14 +11,10 @@ var PouchDB = require('pouchdb');
 var immutable = require('immutable');
 var admin = require("firebase-admin");
 var cloudantCredentials = require('./cloudantCredentials');
-var multer = require('multer');
 var handleS3Credentials = require('./s3Credentials');
 import handlePostMoment from './postMoment';
 import getMoments from './getMoments';
-
-const callMe = async (x) => {
-  await Promise.resolve("hi");
-}
+import usersDb from './usersDb';
 
 var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
@@ -27,8 +23,7 @@ admin.initializeApp({
   databaseURL: "https://gehc125.firebaseio.com"
 });
 
-
-var counter = 0;
+// eslint-disable-next-line no-undef
 const version = __VERSION__;
 const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is version ${(new Date(version)).toLocaleString()} at %TIME%</p> </body> </html>`
 
@@ -133,7 +128,7 @@ function pushToChallengee(gameResult) {
 function resolveChallenge(game) {
   const challengeGameId = game.get("challengeGameId")
   if (!challengeGameId) return;
-  const challengeGame = gameDB.get(challengeGameId)
+  return gameDB.get(challengeGameId)
   .then((doc) => Object.assign({status: "closed"}, doc))
   .then((newDoc) => gameDB.put(newDoc))
   .then(() => console.log("update to status was successful "))
