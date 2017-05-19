@@ -3,6 +3,7 @@
 import {momentsDbAuth} from './cloudantCredentials';
 const setItem = require('./localPouch').setItem;
 import PouchDB from 'pouchdb';
+import logError from './logError';
 
 const momentsDb = new PouchDB(
   "https://dwoodlock.cloudant.com/gehc_moments", 
@@ -30,7 +31,7 @@ const handlePostMoment = async (req, res) => {
     res.send(JSON.stringify(info)); 
   }
   catch(err) { //not rethrowing
-    console.log("error saving to moments db", err);
+    logError("error saving to moments db " + JSON.stringify(err));
     res.send(JSON.stringify(err)); 
   }  
 }

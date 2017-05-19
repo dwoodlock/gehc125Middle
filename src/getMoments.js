@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb';
 import {momentsDbAuth, userDbAuth} from './cloudantCredentials';
 import omit from 'lodash/omit';
 import immutable from 'immutable';
+import logError from './logError';
 
 const momentsDb = new PouchDB(
   "https://dwoodlock.cloudant.com/gehc_moments", 
@@ -13,10 +14,9 @@ const usersDb = new PouchDB(
   "https://dwoodlock.cloudant.com/gehc125users", 
   {auth: userDbAuth});
 
-
-
 const getMoments = async (req, res) => {
   console.log("got a get at /moments");
+
   try {
     const allDocs = await momentsDb.allDocs({
       include_docs: true,
@@ -40,7 +40,7 @@ const getMoments = async (req, res) => {
    
   }
   catch(err) {
-    console.log("error reading from momentsDB ", err);
+    logError("error reading from momentsDB ", err);
   }
 
 }

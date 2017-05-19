@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
+var babel = require("gulp-babel");
  
 gulp.task('lint', () => {
     // ESLint ignores files with "node_modules" paths. 
@@ -19,9 +20,18 @@ gulp.task('lint', () => {
         // lint error, return the stream and pipe to failAfterError last. 
         .pipe(eslint.failAfterError());
 });
+
+// gulp.task("babel", function () {
+//   return gulp.src("src/**/*.js")
+//     .pipe(babel())
+//     .pipe(gulp.dest("dist"));
+// });
  
 gulp.task('default', ['lint'], function () {
     // This will only run if the lint task is successful... 
+  return gulp.src("src/**/*.js")
+    .pipe(babel())
+    .pipe(gulp.dest("dist"));
 });
 
-gulp.watch('src/**/*.js', ['lint']);
+gulp.watch('src/**/*.js', ['default']);

@@ -15,13 +15,14 @@ var handleS3Credentials = require('./s3Credentials');
 import handlePostMoment from './postMoment';
 import getMoments from './getMoments';
 import usersDb from './usersDb';
+import logError from './logError';
 
-var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
+// var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://gehc125.firebaseio.com"
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://gehc125.firebaseio.com"
+// });
 
 // eslint-disable-next-line no-undef
 const version = __VERSION__;
@@ -59,7 +60,7 @@ app.post('/user', function (req, res) {
   setItem(usersDb, user.userId, user)
   .then((info) => console.log("success posting to users database ", info))
   .catch((err) => {
-    console.log("error posting to users database ", err);
+    logError("error posting to users database " + JSON.stringify(err));
   })
   .then(() => {
     res.send('Hello World2!')    
@@ -88,7 +89,7 @@ function pushToChallengee3(deviceToken, challenger, badge) {
     console.log("Successfully sent message:", response);
   })
   .catch(function(error) {
-    console.log("Error sending message:", error);
+    logError("Error sending message: " + JSON.stringify(error));
   });   
 }
 
@@ -105,7 +106,7 @@ function getUser(id) {
   .then((doc) => {
     return immutable.Map(doc)})
   .catch((err) => {
-    console.log("error getting the user ", id);
+    logError("error getting the user " + JSON.stringify(id));
     return Promise.reject(err);
   })
 }
@@ -122,7 +123,7 @@ function pushToChallengee(gameResult) {
   .then(([deviceToken, challenger, badge]) => {
     pushToChallengee3(deviceToken, challenger, badge);
   })
-  .catch((err) => console.log("error sending push notification ", err))
+  .catch((err) => logError("error sending push notification " + JSON.stringify(err)))
 }
 
 function resolveChallenge(game) {
@@ -132,7 +133,7 @@ function resolveChallenge(game) {
   .then((doc) => Object.assign({status: "closed"}, doc))
   .then((newDoc) => gameDB.put(newDoc))
   .then(() => console.log("update to status was successful "))
-  .catch((err) => console.log("some error in updating the status ", err))
+  .catch((err) => logError("some error in updating the status " + JSON.stringify(err)))
 }
 
 app.post('/gameresults', function (req, res) {
@@ -142,7 +143,7 @@ app.post('/gameresults', function (req, res) {
   .then(() => console.log("game results post was successful"))
   .then(() => pushToChallengee(game))
   .then(() => resolveChallenge(game))
-  .catch((err) => console.log("game results POST error ", err));
+  .catch((err) => logError("game results POST error " + JSON.stringify(err)));
   res.send("hey");
 })
 

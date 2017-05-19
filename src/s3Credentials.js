@@ -41,7 +41,7 @@ function getPolicy() {
       ["starts-with", "$key", "uploads/"],
       {"acl": "public-read"},
       ["starts-with", "$Content-Type", "image/"],
-
+      ["x-amz-meta-Cache-Control", "max-age=31557600"],
       {"x-amz-credential": `${AccessKeyID}/${today}/us-east-2/s3/aws4_request`},
       {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
       {"x-amz-date": `${today}T000000Z` }
