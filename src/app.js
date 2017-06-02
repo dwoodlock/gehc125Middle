@@ -16,6 +16,8 @@ import handlePostMoment from './postMoment';
 import getMoments from './getMoments';
 import usersDb from './usersDb';
 import logError from './logError';
+import moment from 'moment-timezone';
+import handleLike from './handleLike';
 
 // var serviceAccount = require("../../nonjs/gehc125-firebase-adminsdk-wnyyt-187283aae4.json");
 
@@ -26,7 +28,8 @@ import logError from './logError';
 
 // eslint-disable-next-line no-undef
 const version = __VERSION__;
-const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is version ${(new Date(version)).toLocaleString()} at %TIME%</p> </body> </html>`
+const displayVersion = moment(version).tz("America/Chicago").format("dddd, MMMM Do YYYY, h:mm:ss a") + " CST";
+const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <html lang="en"> <head> <meta http-equiv="content-type" content="text/html; charset=utf-8"> <title>Title Goes Here</title> </head> <body> <p>This is version ${displayVersion} at %TIME%</p> </body> </html>`
 
 const gameDB = new PouchDB("https://dwoodlock.cloudant.com/gehc125games", {
   auth: cloudantCredentials.gamesDbAuth
@@ -151,6 +154,8 @@ app.post('/post', handlePostMoment);
 app.get('/moments', getMoments);
 
 app.get("/s3Credentials", handleS3Credentials);
+
+app.post("/like", handleLike);
 
 function sortByDate(a, b) {
   return (a.timestamp - b.timestamp);

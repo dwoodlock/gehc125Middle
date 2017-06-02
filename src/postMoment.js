@@ -25,7 +25,7 @@ clientTimestamp
 const handlePostMoment = async (req, res) => {
   try {
     const body = req.body;
-    const id = body.timestamp + "-" + body.postId; 
+    const id = body.postId; 
     const info = await setItem(momentsDb, id, body);    
     console.log("successfully saved moment ", info);
     res.send(JSON.stringify(info)); 

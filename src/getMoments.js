@@ -1,14 +1,11 @@
 //getMoments.js
 //
 import PouchDB from 'pouchdb';
-import {momentsDbAuth, userDbAuth} from './cloudantCredentials';
+import {userDbAuth} from './cloudantCredentials';
 import omit from 'lodash/omit';
 import immutable from 'immutable';
 import logError from './logError';
-
-const momentsDb = new PouchDB(
-  "https://dwoodlock.cloudant.com/gehc_moments", 
-  {auth: momentsDbAuth});
+import momentsDb from './momentsDb';
 
 const usersDb = new PouchDB(
   "https://dwoodlock.cloudant.com/gehc125users", 
@@ -32,9 +29,10 @@ const getMoments = async (req, res) => {
     const users = await Promise.all(userIds.map((id) => {
       return usersDb.get(id)
     }));
+    const usersWithoutExtras = users.map((u) => omit(u, ["_id", "_rev"]));
     const result = {
       moments: docsWithoutExtras,
-      users: users      
+      users: usersWithoutExtras      
     }
     res.send(JSON.stringify(result));   
    
